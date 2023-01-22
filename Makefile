@@ -13,5 +13,7 @@ package-reinstall:
 	python3 -m pip install --force-reinstall dist/*.whl
 lint:
 	poetry run flake8 page_analyzer
+test:
+	poetry run pytest
     
-.PHONY: install dev build package-install package-reinstall
+.PHONY: install dev build package-install package-reinstall lint test
