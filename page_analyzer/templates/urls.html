@@ -23,24 +23,32 @@
           </div>    
       </nav>
   </header>
-  {% if errors %}
-      {% for category, error in errors %}
-          <div class="alert {{ category }}" role="alert">{{ error }}</div>
-      {% endfor %}
-  {% endif %}
   <main class="flex-grow-1">
       <div class="container-lg mt-3">
-          <div class="row">
-              <div class="col12 col-md-10 col-lg-8 mx-auto rounded-3 border bg-light p-5">
-                <h1 class="display-3">Анализатор страниц</h1>
-                <p class="lead">Бесплатно проверяйте сайты на SEO пригодность</p>
-                <form action="/urls" method="post" class="d-flex justify-content-center" required>
-                    <input class="form-control form-control-lg" type="text" name="url" placeholder="https://www.example.com" value="{{ url_fields_dct.url }}">
-                    <input class="btn btn-primary btn-lg ms-3 px-5 text-uppercase mx-3" type="submit" value="Проверить">
-                </form>
-              </div>    
-          </div>    
+          <h1>Сайты</h1>
+          <div class="table-responsive">
+              <table class="table table-bordered table-hover table-nowrap" data-test="url">
+                  <tbody>
+                  <tr>
+                      <td>ID</td>
+                      <td>Имя</td>
+                      <td>Последняя проверка</td>
+                      <td>Код ответа</td>
+                  </tr>
+                  {% for url in urls %}
+                  <tr>
+                      <td>{{ url[0] }}</td>
+                      <td><a href="{{ url_for('get_one_url', id=url[0]) }}">{{ url[1] }}</a></td>
+                      <td></td>
+                      <td></td>
+                  </tr>
+                  {% endfor %}
+                  </tbody>
+              </table>
+          </div>
+          
       </div>
+
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
