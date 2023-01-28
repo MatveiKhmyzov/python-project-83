@@ -14,9 +14,11 @@ from page_analyzer.data_base import (
     add_url_in_bd,
     get_url_by_name,
     get_all_url_records,
-    get_url_by_id
+    get_url_by_id,
+    add_check_in_bd,
+    get_checks_url_by_id,
+    get_last_check_url
 )
-
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
@@ -61,12 +63,30 @@ def add_url():
 
 @app.get('/urls')
 def get_all_urls():
+    checks = {}
     all_urls = get_all_url_records()
-    return render_template('urls.html', urls=all_urls)
+    for url in all_urls:
+        date = get_last_check_url(url[0])[0]
+        if date is not None:
+            checks[url[1]] = date
+    return render_template('urls.html', urls=all_urls, checks=checks)
 
 
 @app.get('/urls/<id>')
 def get_one_url(id):
     url = get_url_by_id(id)
+    checks = get_checks_url_by_id(id)
     messages = get_flashed_messages(with_categories=True)
-    return render_template('url.html', url=url, messages=messages)
+    return render_template('url.html',
+                           url=url,
+                           messages=messages, checks=checks
+                           )
+
+
+@app.post('/urls/<id>/checks')
+def add_check(id):
+    check_record = {'url_id': id,
+                    'created_at': datetime.now().strftime("%Y-%m-%d")
+                    }
+    add_check_in_bd(check_record)
+    return redirect(url_for('get_one_url', id=id))
