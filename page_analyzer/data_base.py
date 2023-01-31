@@ -2,7 +2,6 @@ import psycopg2
 from psycopg2.extras import DictCursor
 import os
 
-
 DATABASE_URL = os.getenv('DATABASE_URL')
 
 
@@ -45,7 +44,12 @@ def get_all_url_records():
 def add_check_in_bd(check_record):
     conn = psycopg2.connect(DATABASE_URL)
     with conn.cursor() as curs:
-        curs.execute('INSERT INTO url_checks (url_id, status_code, h1, title, description, created_at)\
+        curs.execute('INSERT INTO url_checks\
+                         (url_id,\
+                          status_code,\
+                          h1, title,\
+                          description,\
+                          created_at)\
                      VALUES (%s, %s, %s, %s, %s, %s)',
                      (check_record['url_id'],
                       check_record['status_code'],
