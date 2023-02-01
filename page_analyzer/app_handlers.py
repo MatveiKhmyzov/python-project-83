@@ -12,11 +12,11 @@ from flask import (
 from datetime import datetime
 from page_analyzer.validator import validate, get_check_url
 from page_analyzer.data_base import (
-    add_url_in_bd,
+    add_url_record,
+    add_check_record,
     get_url_by_name,
     get_all_url_records,
     get_url_by_id,
-    add_check_in_bd,
     get_checks_url_by_id,
     get_last_check_url
 )
@@ -57,10 +57,10 @@ def add_url():
             errors=errors
         )
     else:
-        add_url_in_bd(url_fields_dct)
+        add_url_record(url_fields_dct)
         flash('Адрес добавлен', 'alert-success')
         url_record = get_url_by_name(url_fields_dct['url'])
-        id = url_record['name']
+        id = url_record['id']
         return redirect(url_for('get_one_url', id=id))
 
 
@@ -89,7 +89,7 @@ def add_check(id):
     try:
         check_record = get_check_url(id, url)
         if check_record['status_code'] == 200:
-            add_check_in_bd(check_record)
+            add_check_record(check_record)
             flash('Страница успешно проверена', 'alert-success')
         else:
             flash('Произошла ошибка при проверке', 'alert-danger')
