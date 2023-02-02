@@ -13,10 +13,13 @@ def validate(site):  # noqa: C901
     for order in all_orders:
         existed_sites.append(order[1])
     parsed_name = urlparse(site['url'])
-    normalize_name = "{0}://{1}".format(
-        parsed_name.scheme,
-        parsed_name.netloc
-    )
+    if not parsed_name.scheme or not parsed_name.netloc:
+        errors['name'] = 'Некорректный URL'
+    else:
+        normalize_name = "{0}://{1}".format(
+            parsed_name.scheme,
+            parsed_name.netloc
+        )
     if normalize_name != '://':
         site['url'] = normalize_name
     for elem in existed_sites:

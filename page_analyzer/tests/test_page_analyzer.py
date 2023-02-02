@@ -1,5 +1,5 @@
 import pytest
-from page_analyzer.app_handlers import app
+from page_analyzer.app import app
 
 
 @pytest.fixture()

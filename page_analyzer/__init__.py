@@ -1,4 +1,4 @@
-from page_analyzer.app_handlers import app
+from page_analyzer.app import app
 
 
 __all__ = ('app',)
