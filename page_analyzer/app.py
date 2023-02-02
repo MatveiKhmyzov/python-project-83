@@ -43,8 +43,8 @@ def add_url():
     errors = validate(url_fields_dct)
     if errors:
         if errors['name'] == 'Страница уже существует':
-            url_tuple = get_url_by_name(url_fields_dct['url'])
-            id = url_tuple['id']
+            url_record = get_url_by_name(url_fields_dct['url'])
+            id = url_record['id']
             flash(errors['name'], 'alert-primary')
             return redirect(url_for('get_one_url', id=id))
         flash(errors['name'], 'alert-danger')
@@ -55,10 +55,10 @@ def add_url():
             'index.html',
             url_fields_dct=url_fields_dct,
             errors=errors
-        )
+        ), 422
     else:
-        flash('Страница успешно добавлена', 'alert-success')
         add_url_record(url_fields_dct)
+        flash('Страница успешно добавлена', 'alert-success')
         url_record = get_url_by_name(url_fields_dct['url'])
         id = url_record['id']
         return redirect(url_for('get_one_url', id=id))
