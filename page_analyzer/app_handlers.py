@@ -57,8 +57,8 @@ def add_url():
             errors=errors
         )
     else:
-        add_url_record(url_fields_dct)
         flash('Страница успешно добавлена', 'alert-success')
+        add_url_record(url_fields_dct)
         url_record = get_url_by_name(url_fields_dct['url'])
         id = url_record['id']
         return redirect(url_for('get_one_url', id=id))
