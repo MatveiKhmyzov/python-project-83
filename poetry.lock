@@ -298,7 +298,7 @@ watchdog = ["watchdog"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "e13955ff17d1fecc2f9a435cf56a87958949fc0231e5a3735709897a78f6986a"
+content-hash = "e2a7d86cf27b3aa0d0010e3c1a8e07f8078c6296e3a09c6cf1423b5ddeb046c7"
 
 [metadata.files]
 attrs = []
