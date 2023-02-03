@@ -35,7 +35,6 @@ def index():
 def add_url():
     url_fields_dct = request.form.to_dict()
     url_fields_dct['created_at'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    print(url_fields_dct)
     errors = validate(url_fields_dct['url'])
     if errors:
         if errors['name'] == 'Страница уже существует':
@@ -43,21 +42,22 @@ def add_url():
             id = url_record['id']
             flash(errors['name'], 'alert-primary')
             return redirect(url_for('get_one_url', id=id))
-        flash(errors['name'], 'alert-danger')
-        if 'name1' in errors.keys():
-            flash(errors["name1"], 'alert-danger')
-        errors = get_flashed_messages(with_categories=True)
-        return render_template(
-            'index.html',
-            url=url_fields_dct['url'],
-            errors=errors
-        ), 422
+        else:
+            flash(errors['name'], 'alert-danger')
+            if 'name1' in errors.keys():
+                flash(errors["name1"], 'alert-danger')
+            errors = get_flashed_messages(with_categories=True)
+            return render_template(
+                'index.html',
+                url=url_fields_dct['url'],
+                errors=errors
+            ), 422
     else:
         add_url_record(url_fields_dct)
         flash('Страница успешно добавлена', 'alert-success')
         url_record = get_url_by_name(url_fields_dct['url'])
         id = url_record['id']
-    return redirect(url_for('get_one_url', id=id))
+        return redirect(url_for('get_one_url', id=id))
 
 
 @app.get('/urls')
