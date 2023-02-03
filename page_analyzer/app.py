@@ -28,19 +28,15 @@ app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
 @app.get('/')
 def index():
-    url_fields_dct = {}
-    errors = []
-    return render_template('index.html',
-                           url_fields_dct=url_fields_dct,
-                           errors=errors
-                           )
+    return render_template('index.html')
 
 
 @app.post('/urls')
 def add_url():
     url_fields_dct = request.form.to_dict()
     url_fields_dct['created_at'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    errors = validate(url_fields_dct)
+    print(url_fields_dct)
+    errors = validate(url_fields_dct['url'])
     if errors:
         if errors['name'] == 'Страница уже существует':
             url_record = get_url_by_name(url_fields_dct['url'])
@@ -53,7 +49,7 @@ def add_url():
         errors = get_flashed_messages(with_categories=True)
         return render_template(
             'index.html',
-            url_fields_dct=url_fields_dct,
+            url=url_fields_dct['url'],
             errors=errors
         ), 422
     else:
@@ -61,7 +57,7 @@ def add_url():
         flash('Страница успешно добавлена', 'alert-success')
         url_record = get_url_by_name(url_fields_dct['url'])
         id = url_record['id']
-        return redirect(url_for('get_one_url', id=id))
+    return redirect(url_for('get_one_url', id=id))
 
 
 @app.get('/urls')
