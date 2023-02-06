@@ -11,7 +11,7 @@ from flask import (
     get_flashed_messages,
 )
 from datetime import datetime
-from page_analyzer.validator import validate, get_check_url
+from page_analyzer.validator import validate, get_check_url, get_normalize_url
 from page_analyzer.data_base import (
     add_url_record,
     add_check_record,
@@ -40,7 +40,7 @@ def add_url():
     errors = validate(url_fields_dct['url'])
     if errors:
         if errors['name'] == 'Страница уже существует':
-            url_record = get_url_by_name(url_fields_dct['url'])
+            url_record = get_url_by_name(get_normalize_url(url_fields_dct['url']))
             id = url_record['id']
             flash(errors['name'], 'alert-primary')
             return redirect(url_for('get_one_url', id=id))

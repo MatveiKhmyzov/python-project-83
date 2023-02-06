@@ -12,22 +12,27 @@ def validate(url):  # noqa: C901
     existed_sites = []
     for order in all_orders:
         existed_sites.append(order[1])
-    parsed_name = urlparse(url)
-    normalize_name = "{0}://{1}".format(
-        parsed_name.scheme,
-        parsed_name.netloc
-    )
+    normalize_url = get_normalize_url(url)
     if not validators.url(url):
         errors['name'] = 'Некорректный URL'
         if not url:
             errors['name1'] = "URL обязателен"
     else:
-        if normalize_name != '://':
-            url = normalize_name
+        if normalize_url != '://':
+            url = normalize_url
         for elem in existed_sites:
             if elem.startswith(url):
                 errors['name'] = 'Страница уже существует'
     return errors
+
+
+def get_normalize_url(url):
+    parsed_name = urlparse(url)
+    normalize_url = "{0}://{1}".format(
+        parsed_name.scheme,
+        parsed_name.netloc
+    )
+    return normalize_url
 
 
 def get_check_url(id, url):
