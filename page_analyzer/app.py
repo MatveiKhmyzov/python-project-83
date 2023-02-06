@@ -11,7 +11,11 @@ from flask import (
     get_flashed_messages,
 )
 from datetime import datetime
-from page_analyzer.validator import check_validity, get_check_url, get_normalized_url
+from page_analyzer.validator import (
+    check_validity,
+    get_check_url,
+    get_normalized_url
+)
 from page_analyzer.data_base import (
     add_url_record,
     add_check_record,
