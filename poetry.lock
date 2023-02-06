@@ -73,6 +73,14 @@ optional = false
 python-versions = ">=3.5"
 
 [[package]]
+name = "dotenv"
+version = "0.0.5"
+description = "Handle .env files"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "exceptiongroup"
 version = "1.1.0"
 description = "Backport of PEP 654 (exception groups)"
@@ -335,7 +343,7 @@ watchdog = ["watchdog"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "ea45692b2b2a8f22a53692ecb51093d11362769f120d484bfa595324f1114ed1"
+content-hash = "460d78d7975594a760bc5250005a9aa0a76a1823f6df980e23264369c6276bdd"
 
 [metadata.files]
 attrs = []
@@ -348,6 +356,7 @@ decorator = [
     {file = "decorator-5.1.1-py3-none-any.whl", hash = "sha256:b8c3f85900b9dc423225913c5aace94729fe1fa9763b38939a95226f02d37186"},
     {file = "decorator-5.1.1.tar.gz", hash = "sha256:637996211036b6385ef91435e4fae22989472f9d571faba8927ba8253acbc330"},
 ]
+dotenv = []
 exceptiongroup = []
 flake8 = []
 flask = []

@@ -1,5 +1,6 @@
 import requests
-from dotenv import dotenv_values
+import os
+from dotenv import load_dotenv
 from flask import (
     Flask,
     render_template,
@@ -23,8 +24,8 @@ from page_analyzer.data_base import (
 
 
 app = Flask(__name__)
-envs = dotenv_values(".env")
-app.config['SECRET_KEY'] = envs['SECRET_KEY']
+load_dotenv()
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
 
 @app.get('/')

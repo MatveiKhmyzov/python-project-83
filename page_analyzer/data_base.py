@@ -1,11 +1,11 @@
+import os
 import psycopg2
 from psycopg2.extras import DictCursor
-from dotenv import dotenv_values
+from dotenv import load_dotenv
 
 
-envs = dotenv_values(".env")
-DATABASE_URL = envs['DATABASE_URL']
-fields_dct = {}
+load_dotenv()
+DATABASE_URL = os.getenv('DATABASE_URL')
 
 
 def add_url_record(url_fields_dct):
