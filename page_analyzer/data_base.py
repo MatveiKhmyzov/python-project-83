@@ -1,9 +1,10 @@
 import psycopg2
 from psycopg2.extras import DictCursor
-import os
+from dotenv import dotenv_values
 
 
-DATABASE_URL = os.getenv('DATABASE_URL')
+envs = dotenv_values(".env")
+DATABASE_URL = envs['DATABASE_URL']
 fields_dct = {}
 
 
