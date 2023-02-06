@@ -37,7 +37,7 @@ def get_normalized_url(url):
 
 def get_check_url(id, url):
     r = requests.get(url)
-    code = r.status_code
+    code = r.status_code     
     html_file = r.text
     soup = BeautifulSoup(html_file, 'html.parser')
     if soup.h1:
@@ -55,7 +55,6 @@ def get_check_url(id, url):
         description = find_description['content'].strip()
     else:
         description = ''
-    print(h1)
     check_record = {'url_id': id,
                     'status_code': code,
                     'h1': h1,
