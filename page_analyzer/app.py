@@ -11,7 +11,7 @@ from flask import (
     get_flashed_messages,
 )
 from datetime import datetime
-from page_analyzer.validator import validate, get_check_url, get_normalize_url
+from page_analyzer.validator import check_validity, get_check_url, get_normalized_url
 from page_analyzer.data_base import (
     add_url_record,
     add_check_record,
@@ -37,8 +37,8 @@ def index():
 def add_url():
     url_fields_dct = request.form.to_dict()
     url_fields_dct['created_at'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    errors = validate(url_fields_dct['url'])
-    normalize_url = get_normalize_url(url_fields_dct['url'])
+    normalize_url = get_normalized_url(url_fields_dct['url'])
+    errors = check_validity(normalize_url)
     url_fields_dct['url'] = normalize_url
     if errors:
         if errors['name'] == 'Страница уже существует':

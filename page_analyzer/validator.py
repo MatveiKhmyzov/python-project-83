@@ -6,16 +6,13 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 
 
-def validate(url):  # noqa: C901
+def check_validity(url):  # noqa: C901
     errors = {}
     all_orders = get_all_url_records()
-    normalize_url = get_normalize_url(url)
     existed_sites = []
     for order in all_orders:
         existed_sites.append(order[1])
     if validators.url(url):
-        if normalize_url != '://':
-            url = normalize_url
         for elem in existed_sites:
             if elem.startswith(url):
                 errors['name'] = 'Страница уже существует'
@@ -26,12 +23,15 @@ def validate(url):  # noqa: C901
     return errors
 
 
-def get_normalize_url(url):
-    parsed_name = urlparse(url)
-    normalize_url = "{0}://{1}".format(
-        parsed_name.scheme,
-        parsed_name.netloc
-    )
+def get_normalized_url(url):
+    if url:
+        parsed_name = urlparse(url)
+        normalize_url = "{0}://{1}".format(
+            parsed_name.scheme,
+            parsed_name.netloc
+        )
+    else:
+        normalize_url = ''
     return normalize_url
 
 
