@@ -9,20 +9,20 @@ from datetime import datetime
 def validate(url):  # noqa: C901
     errors = {}
     all_orders = get_all_url_records()
+    normalize_url = get_normalize_url(url)
     existed_sites = []
     for order in all_orders:
         existed_sites.append(order[1])
-    normalize_url = get_normalize_url(url)
-    if not validators.url(url):
-        errors['name'] = 'Некорректный URL'
-        if not url:
-            errors['name1'] = "URL обязателен"
-    else:
+    if validators.url(url):
         if normalize_url != '://':
             url = normalize_url
         for elem in existed_sites:
             if elem.startswith(url):
                 errors['name'] = 'Страница уже существует'
+    else:
+        errors['name'] = 'Некорректный URL'
+        if not url:
+            errors['name1'] = "URL обязателен"
     return errors
 
 

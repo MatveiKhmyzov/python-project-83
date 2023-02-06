@@ -38,9 +38,11 @@ def add_url():
     url_fields_dct = request.form.to_dict()
     url_fields_dct['created_at'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     errors = validate(url_fields_dct['url'])
+    normalize_url = get_normalize_url(url_fields_dct['url'])
+    url_fields_dct['url'] = normalize_url
     if errors:
         if errors['name'] == 'Страница уже существует':
-            url_record = get_url_by_name(get_normalize_url(url_fields_dct['url']))
+            url_record = get_url_by_name(normalize_url)
             id = url_record['id']
             flash(errors['name'], 'alert-primary')
             return redirect(url_for('get_one_url', id=id))
@@ -57,7 +59,7 @@ def add_url():
     else:
         add_url_record(url_fields_dct)
         flash('Страница успешно добавлена', 'alert-success')
-        url_record = get_url_by_name(url_fields_dct['url'])
+        url_record = get_url_by_name(normalize_url)
         id = url_record['id']
         return redirect(url_for('get_one_url', id=id))
 
