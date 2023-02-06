@@ -41,18 +41,21 @@ def get_check_url(id, url):
     html_file = r.text
     soup = BeautifulSoup(html_file, 'html.parser')
     if soup.h1:
-        h1 = soup.h1.string
+        h1 = soup.find('h1')
+        h1 = h1.text.strip()
     else:
         h1 = ''
     if soup.title:
-        title = soup.title.string
+        title = soup.find('title')
+        title = title.text.strip()
     else:
         title = ''
     if soup.find(attrs={"name": "description"}):
         find_description = soup.find(attrs={"name": "description"})
-        description = find_description['content']
+        description = find_description['content'].strip()
     else:
         description = ''
+    print(h1)
     check_record = {'url_id': id,
                     'status_code': code,
                     'h1': h1,
