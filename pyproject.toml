@@ -1,7 +1,12 @@
 [tool.poetry]
 name = "hexlet-code"
 version = "0.1.0"
-description = ""
+description = "Website that mimics the basic functionality of analyzing said pages for SEO suitability"
+classifiers = [
+    "Framework :: Flask ",
+    "Programming Language :: Python :: 3",
+    'Intended Audience :: End Users/Desktop',
+]
 authors = ["Matvei Khmyzov <matw.hmizov@yandex.ru>"]
 packages = [
     { include = "page_analyzer"}

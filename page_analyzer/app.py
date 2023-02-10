@@ -14,6 +14,7 @@ from datetime import datetime
 from page_analyzer.validator import (
     check_validity,
     get_check_url,
+    get_http_response,
     get_normalized_url
 )
 from page_analyzer.data_base import (
@@ -43,7 +44,6 @@ def add_url():
     url_fields_dct['created_at'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     normalize_url = get_normalized_url(url_fields_dct['url'])
     errors = check_validity(normalize_url)
-    url_fields_dct['url'] = normalize_url
     if errors:
         if errors['name'] == 'Страница уже существует':
             url_record = get_url_by_name(normalize_url)
@@ -61,6 +61,7 @@ def add_url():
                 errors=errors
             ), 422
     else:
+        url_fields_dct['url'] = normalize_url
         add_url_record(url_fields_dct)
         flash('Страница успешно добавлена', 'alert-success')
         url_record = get_url_by_name(normalize_url)
@@ -91,12 +92,25 @@ def add_check(id):
     url_record = get_url_by_id(id)
     url = url_record['name']
     try:
-        check_record = get_check_url(id, url)
-        if check_record['status_code'] == 200:
-            add_check_record(check_record)
-            flash('Страница успешно проверена', 'alert-success')
-        else:
-            flash('Произошла ошибка при проверке', 'alert-danger')
+        http_response = get_http_response(url)
     except requests.RequestException:
         flash('Произошла ошибка при проверке', 'alert-danger')
+    else:
+        check_record = get_check_url(id, http_response)
+        add_check_record(check_record)
+        flash('Страница успешно проверена', 'alert-success')
     return redirect(url_for('get_one_url', id=id))
+
+
+@app.errorhandler(404)
+def not_found_error(error):
+    return render_template('error.html',
+                           message='Страница не найдена!'
+                           ), 404
+
+
+@app.errorhandler(500)
+def internal_error(error):
+    return render_template('error.html',
+                           message='Внутренняя проблема сервера.'
+                           ), 500

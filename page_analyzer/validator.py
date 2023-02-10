@@ -1,21 +1,17 @@
 import validators
 import requests
-from page_analyzer.data_base import get_all_url_records
+from page_analyzer.data_base import get_url_by_name
 from urllib.parse import urlparse
 from bs4 import BeautifulSoup
 from datetime import datetime
 
 
-def check_validity(url):  # noqa: C901
+def check_validity(url):
     errors = {}
-    all_orders = get_all_url_records()
-    existed_sites = []
-    for order in all_orders:
-        existed_sites.append(order[1])
+    url_found = get_url_by_name(url)
     if validators.url(url):
-        for elem in existed_sites:
-            if elem.startswith(url):
-                errors['name'] = 'Страница уже существует'
+        if url_found:
+            errors['name'] = 'Страница уже существует'
     else:
         errors['name'] = 'Некорректный URL'
         if not url:
@@ -35,26 +31,20 @@ def get_normalized_url(url):
     return normalize_url
 
 
-def get_check_url(id, url):
-    r = requests.get(url)
-    code = r.status_code
-    html_file = r.text
+def get_http_response(url):
+    http_response = requests.get(url)
+    http_response.raise_for_status()
+    return http_response
+
+
+def get_check_url(id, http_response):
+    html_file = http_response.text
+    code = http_response.status_code
     soup = BeautifulSoup(html_file, 'html.parser')
-    if soup.h1:
-        h1 = soup.find('h1')
-        h1 = h1.text.strip()
-    else:
-        h1 = ''
-    if soup.title:
-        title = soup.find('title')
-        title = title.text.strip()
-    else:
-        title = ''
-    if soup.find(attrs={"name": "description"}):
-        find_description = soup.find(attrs={"name": "description"})
-        description = find_description['content'].strip()
-    else:
-        description = ''
+    h1 = soup.find('h1').text.strip() if soup.find('h1') else ''
+    title = soup.find('title').text.strip() if soup.find('title') else ''
+    description = soup.find(attrs={"name": "description"})['content'].strip()\
+        if soup.find(attrs={"name": "description"}) else ''
     check_record = {'url_id': id,
                     'status_code': code,
                     'h1': h1,
